@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Candidate Profile | Work Cosmo Recruitment Suite HR</title>
+    <link rel="icon" type="image/png" href="/app/assets/images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary-color: #3b82f6;
+            --font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-print {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .5rem 1.1rem;
+            border-radius: .75rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            font-size: .8rem;
+            font-weight: 700;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .dark .btn-print {
+            background: #1e293b;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-1px);
+            background: #f8fafc;
+        }
+
+        .dark .btn-print:hover {
+            background: #334155;
+        }
+
+        /* Section Layouts */
+        .section-title {
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: 1rem;
+            padding-bottom: .6rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+
+        .dark .section-title {
+            border-color: rgba(51, 65, 85, 0.4);
+            color: #64748b;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem 2rem;
+        }
+
+        .data-pill {
+            background: transparent;
+            border: none;
+            border-left: 3px solid rgba(226, 232, 240, 0.8);
+            border-radius: 0;
+            padding: 0.25rem 0 0.25rem 1rem;
+            transition: all 0.2s;
+        }
+
+        .dark .data-pill {
+            border-left-color: rgba(51, 65, 85, 0.6);
+        }
+
+        .data-pill:hover {
+            border-left-color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .data-pill .lbl {
+            font-size: .62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            color: #94a3b8;
+            margin-bottom: 2px;
+        }
+
+        .data-pill .val {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1e293b;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .dark .data-pill .val {
+            color: #f1f5f9;
+        }
+
+        /* Resume preview */
+        .resume-wrap {
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: white;
+        }
+
+        .dark .resume-wrap {
+            border-color: rgba(51, 65, 85, 0.6);
+            background: #0f172a;
+        }
+
+        .resume-wrap iframe {
+            width: 100%;
+            height: 700px;
+            display: block;
+            border: none;
+        }
+
+        .centered-state {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            text-align: center;
+            padding: 2.5rem;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .glass-card {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0 !important;
+                background: white !important;
+                backdrop-filter: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-[#0f172a] min-h-screen text-slate-900 dark:text-slate-100 antialiased font-jakarta">
+    <!-- Loading -->
+    <div id="state-loading" class="centered-state">
+        <div class="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <p class="text-slate-500 dark:text-slate-400 font-bold">Retrieving profile snapshot...</p>
+    </div>
+
+    <!-- Error -->
+    <div id="state-error" style="display:none;" class="centered-state animate-fade-in text-center">
+        <div
+            class="w-20 h-20 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-3xl flex items-center justify-center text-3xl mb-4">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+        <h2 class="text-2xl font-black mb-2">Access Denied</h2>
+        <p class="text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
+            This share link is invalid, expired, or may have been restricted. Please contact your recruitment team for a
+            new link.
+        </p>
+    </div>
+
+    <!-- Profile -->
+    <div id="state-profile" style="display:none;" class="animate-fade-in">
+        <!-- Navbar -->
+        <nav class="sticky top-0 z-50 glass-card px-6 py-4 mb-8">
+            <div class="max-w-4xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                        <i class="fas fa-users-rays"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-sm font-black tracking-tight leading-none">WORK COSMO RECRUITMENT SUITE</h1>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Share Portal
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 no-print">
+                    <button id="theme-toggle"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button class="btn-print" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        <span class="hidden md:inline">Print Profile</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-4xl mx-auto px-6 pb-12">
+            <div class="glass-card rounded-[2.5rem] overflow-hidden shadow-2xl shadow-blue-900/5">
+                <!-- Profile Header -->
+                <div
+                    class="relative p-8 md:p-12 overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+                    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <circle cx="2" cy="2" r="1" fill="currentColor" />
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#dots)" />
+                        </svg>
+                    </div>
+
+                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+                        <div class="w-32 h-32 rounded-3xl bg-white/20 backdrop-blur-md border-2 border-white/30 flex items-center justify-center text-4xl font-black text-white shadow-2xl"
+                            id="hdr-initial">?</div>
+                        <div class="flex-1">
+                            <h2 class="text-4xl font-black mb-2" id="hdr-name">Candidate Name</h2>
+                            <p class="text-xl font-medium text-blue-100 mb-4" id="hdr-job">Target Position</p>
+                            <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                                <span
+                                    class="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-black uppercase tracking-widest"
+                                    id="hdr-stage">Applied</span>
+                                <span
+                                    class="px-4 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 text-[10px] font-black uppercase tracking-widest text-emerald-300">Verified
+                                    Profile</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Content -->
+                <div class="p-8 md:p-12 space-y-12">
+                    <!-- Contact -->
+                    <section>
+                        <h3 class="section-title">
+                            <i class="fas fa-address-card text-blue-500"></i> Contact Information
+                        </h3>
+                        <div class="data-grid" id="sec-contact"></div>
+                    </section>
+
+                    <!-- Professional -->
+                    <section>
+                        <h3 class="section-title">
+                            <i class="fas fa-briefcase text-indigo-500"></i> Professional Details
+                        </h3>
+                        <div class="data-grid" id="sec-professional"></div>
+                    </section>
+
+                    <!-- Compensation -->
+                    <section>
+                        <h3 class="section-title">
+                            <i class="fas fa-indian-rupee-sign text-emerald-500"></i> Compensation & Notice
+                        </h3>
+                        <div class="data-grid" id="sec-compensation"></div>
+                    </section>
+
+                    <!-- Notes -->
+                    <section id="wrap-notes" style="display:none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-note-sticky text-amber-500"></i> Notes / Summary
+                        </h3>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 text-slate-600 dark:text-slate-400 leading-relaxed text-sm whitespace-pre-wrap border border-slate-200/60 dark:border-slate-700/60"
+                            id="sec-notes"></div>
+                    </section>
+
+                    <!-- Skills -->
+                    <section id="wrap-skills" style="display:none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-tags text-cyan-500"></i> Skills & Expertise
+                        </h3>
+                        <div id="sec-skills" class="flex flex-wrap gap-2"></div>
+                    </section>
+
+                    <!-- Resume -->
+                    <section id="wrap-resume" style="display:none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-file-lines text-rose-500"></i> Resume Preview
+                        </h3>
+                        <div id="sec-resume" class="animate-fade-in"></div>
+                    </section>
+                </div>
+
+                <!-- Footer -->
+                <div
+                    class="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                        Shared via <span class="text-blue-600 dark:text-blue-400">Work Cosmo Recruitment Suite HR</span> •
+                        Read-only snapshot
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase (compat SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script>
+        firebase.initializeApp({
+            apiKey: "AIzaSyDKuFUJyHUl5AIFSFHCg-4S_wadsha6Et4",
+            authDomain: "recruitment-suite-hr.firebaseapp.com",
+            projectId: "recruitment-suite-hr",
+            storageBucket: "recruitment-suite-hr.firebasestorage.app",
+            messagingSenderId: "1049067446272",
+            appId: "1:1049067446272:web:a0eb4e5a9fac1589a8f8e5",
+            measurementId: "G-87FVXXYEP7"
+        }); const db = firebase.firestore();
+
+        // --- THEME & SETTINGS ---
+        let portalSettings = null;
+
+        const fetchPortalSettings = async (companyId) => {
+            try {
+                const settingsDocId = companyId ? `publicPortal_${companyId}` : 'publicPortal';
+                let docSnap = await db.collection('settings').doc(settingsDocId).get();
+                if (docSnap.exists) {
+                    portalSettings = docSnap.data();
+                    applySettings();
+                } else if (companyId) {
+                    // Fallback to global
+                    docSnap = await db.collection('settings').doc('publicPortal').get();
+                    if (docSnap.exists) {
+                        portalSettings = docSnap.data();
+                        applySettings();
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch settings:", err);
+            }
+        };
+
+        const applySettings = () => {
+            if (!portalSettings) return;
+
+            if (portalSettings.primaryColor) {
+                const c = portalSettings.primaryColor;
+                document.documentElement.style.setProperty('--primary-color', c);
+                const prev = document.getElementById('dynamic-theme-style');
+                if (prev) prev.remove();
+                const style = document.createElement('style');
+                style.id = 'dynamic-theme-style';
+                style.textContent = `
+                    .btn-primary { background-color: ${c} !important; border-color: ${c} !important; }
+                    .data-pill:hover { border-color: ${c} !important; }
+                    #hdr-initial { background-color: ${c} !important; }
+                    .bg-blue-600 { background-color: ${c} !important; }
+                    .text-blue-600 { color: ${c} !important; }
+                    .border-blue-600 { border-color: ${c} !important; }
+                    .from-blue-600 { --tw-gradient-from: ${c} !important; }
+                    .to-indigo-700 { --tw-gradient-to: ${c}cc !important; }
+                `;
+                document.head.appendChild(style);
+            }
+
+            if (portalSettings.backgroundUrl) {
+                document.body.style.backgroundImage = `url('${portalSettings.backgroundUrl}')`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundAttachment = 'fixed';
+            }
+        };
+
+        // Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        const setDark = (dark) => {
+            document.documentElement.classList.toggle('dark', dark);
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        };
+        themeBtn.addEventListener('click', () => setDark(!document.documentElement.classList.contains('dark')));
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            setDark(true);
+        }
+
+        // --- LOGIC ---
+        function _shareHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const c = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + c;
+                hash |= 0;
+            }
+            return Math.abs(hash).toString(36);
+        }
+
+        function pill(label, value) {
+            if (value === undefined || value === null || value === '') return '';
+            return `
+                <div class="data-pill">
+                    <div class="lbl">${label}</div>
+                    <div class="val">${value}</div>
+                </div>`;
+        }
+        function fmt(n) { return Number(n || 0).toLocaleString('en-IN'); }
+
+        const ACTIVE_SUBSCRIPTION_STATUSES = new Set(['trialing', 'active', 'grace']);
+        const RESERVED_HOSTS = new Set(['anchan31', 'access', 'app', 'candidate', 'careers', 'share', 'workcosmo', 'www', 'localhost', '127']);
+
+        function normalizeClientId(value = '') {
+            return value.toString().toLowerCase().trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w-]+/g, '')
+                .replace(/--+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
+        }
+
+        function getTenantFromHost() {
+            const host = window.location.hostname.toLowerCase();
+            if (!host || host === 'localhost' || host === '127.0.0.1') return '';
+            const parts = host.split('.');
+            if (parts.length < 3) return '';
+            const subdomain = normalizeClientId(parts[0]);
+            return RESERVED_HOSTS.has(subdomain) ? '' : subdomain;
+        }
+
+        function subscriptionUsable(subscription) {
+            if (!subscription || !ACTIVE_SUBSCRIPTION_STATUSES.has(subscription.status)) return false;
+            const expiry = subscription.currentPeriodEnd || subscription.trialEndsAt || subscription.expiresAt;
+            if (!expiry) return true;
+            const expiryDate = expiry.seconds ? new Date(expiry.seconds * 1000) : new Date(expiry);
+            if (Number.isNaN(expiryDate.getTime())) return true;
+            const graceDays = Number(subscription.gracePeriodDays || 0);
+            expiryDate.setDate(expiryDate.getDate() + graceDays);
+            return expiryDate >= new Date();
+        }
+
+        async function loadCompanyByClientId(clientId) {
+            const direct = await db.collection('companies').doc(clientId).get();
+            if (direct.exists) return { id: direct.id, ...direct.data() };
+
+            for (const field of ['companyId', 'clientId', 'subdomain']) {
+                const snap = await db.collection('companies').where(field, '==', clientId).limit(1).get();
+                if (!snap.empty) return { id: snap.docs[0].id, ...snap.docs[0].data() };
+            }
+            return null;
+        }
+
+        async function requireShareAccess(candidate) {
+            const candidateClientId = normalizeClientId(candidate.companyId || candidate.clientId || candidate.subdomain);
+            const hostClientId = getTenantFromHost();
+            if (hostClientId) {
+                const hostCompany = await loadCompanyByClientId(hostClientId);
+                if (hostCompany && hostCompany.id !== candidateClientId) {
+                    throw new Error('This share link belongs to another workspace.');
+                }
+            }
+            if (!candidateClientId) return;
+
+            const company = await loadCompanyByClientId(candidateClientId);
+            if (!company) throw new Error('Workspace not found.');
+            if (company.status !== 'active') throw new Error('Workspace is inactive.');
+
+            const subscriptionId = company.subscriptionId;
+            const subscriptionSnap = subscriptionId ? await db.collection('subscriptions').doc(subscriptionId).get() : null;
+            const subscription = subscriptionSnap && subscriptionSnap.exists ? subscriptionSnap.data() : null;
+            if (!subscriptionUsable(subscription)) throw new Error('Share portal subscription is inactive.');
+
+            const features = Array.isArray(subscription.customFeatures) && subscription.customFeatures.length
+                ? subscription.customFeatures
+                : Array.isArray(company.features) && company.features.length
+                    ? company.features
+                    : ['recruitModule', 'careerPortal', 'shareProfile', 'qrBridgeLogin', 'advancedAnalytics'];
+            if (!features.includes('shareProfile')) throw new Error('Share portal is not enabled for this workspace.');
+        }
+
+        function isInlineViewable(url) {
+            if (!url) return false;
+            const lower = url.toLowerCase().split('?')[0];
+            return lower.endsWith('.pdf') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.png') || lower.endsWith('.webp') || lower.includes('/raw/upload/') || lower.includes('application/pdf');
+        }
+
+        async function loadProfile() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const token = params.get('token');
+
+            if (!id || !token || token !== _shareHash(id + ':rshr2026')) {
+                document.getElementById('state-loading').style.display = 'none';
+                document.getElementById('state-error').style.display = '';
+                return;
+            }
+
+            try {
+                const snap = await db.collection('candidates').doc(id).get();
+                if (!snap.exists) throw new Error('Not found');
+                const c = snap.data();
+                await requireShareAccess(c);
+
+                // Fetch portal settings dynamically based on candidate's companyId
+                await fetchPortalSettings(c.companyId);
+
+                let jobTitle = c.jobTitle || c.appliedFor || '';
+                const looksLikeDocId = (id) => /^[A-Za-z0-9]{15,25}$/.test(id || '');
+
+                if (!jobTitle && c.jobId) {
+                    try {
+                        const jSnap = await db.collection('jobs').doc(c.jobId).get();
+                        if (jSnap.exists && jSnap.data().title) {
+                            jobTitle = jSnap.data().title;
+                        } else if (!looksLikeDocId(c.jobId)) {
+                            jobTitle = c.jobId;
+                        } else {
+                            const qSnap = await db.collection('jobs').where('title', '==', c.jobId).limit(1).get();
+                            if (!qSnap.empty) jobTitle = qSnap.docs[0].data().title || '';
+                        }
+                    } catch (_) { }
+                }
+                if (!jobTitle) jobTitle = 'Position not specified';
+
+                // Header
+                document.getElementById('hdr-initial').innerText = (c.name || '?')[0].toUpperCase();
+                document.getElementById('hdr-name').innerText = c.name || 'Unknown';
+                document.getElementById('hdr-job').innerText = jobTitle;
+                document.getElementById('hdr-stage').innerText = c.stage || 'Applied';
+                document.title = `${c.name || 'Profile'} | Work Cosmo Recruitment Suite HR`;
+
+                // Contact
+                document.getElementById('sec-contact').innerHTML =
+                    pill('Full Name', c.name) +
+                    pill('Email', c.email ? `<a href="mailto:${c.email}" class="text-blue-600 hover:underline transition-all">${c.email}</a>` : '') +
+                    pill('Phone', c.phone ? `<a href="tel:${c.phone}" class="text-blue-600 hover:underline transition-all">${c.phone}</a>` : '') +
+                    pill('Gender', c.gender) +
+                    pill('Address', c.address) +
+                    pill('City', c.city || c.location);
+
+                // Professional
+                document.getElementById('sec-professional').innerHTML =
+                    pill('Experience', c.experience ? `${c.experience} Yrs` : '') +
+                    pill('Qualification', c.qualification) +
+                    pill('Current Company', c.currentCompany) +
+                    pill('Designation', c.designation || c.currentDesignation) +
+                    pill('Skills', c.skills ? (Array.isArray(c.skills) ? c.skills.join(', ') : c.skills) : '') +
+                    pill('Source', c.source) +
+                    pill('Application Date', c.createdAt
+                        ? new Date(c.createdAt.seconds ? c.createdAt.seconds * 1000 : c.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                        : '');
+
+                // Compensation
+                document.getElementById('sec-compensation').innerHTML =
+                    pill('Current CTC', c.currentCTC ? `₹${fmt(c.currentCTC)}/mo` : '') +
+                    pill('Expected CTC', c.expectedCTC ? `₹${fmt(c.expectedCTC)}/mo` : '') +
+                    pill('Notice Period', c.noticePeriod ? `${c.noticePeriod} Days` : '');
+
+                // Notes
+                const notes = c.notes || c.coverLetter || c.remarks || '';
+                if (notes) {
+                    document.getElementById('sec-notes').innerText = notes;
+                    document.getElementById('wrap-notes').style.display = '';
+                }
+
+                // Skills
+                if (Array.isArray(c.tags) && c.tags.length) {
+                    document.getElementById('sec-skills').innerHTML = c.tags.map(t =>
+                        `<span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800 rounded-lg text-xs font-bold uppercase tracking-wider">${t}</span>`
+                    ).join('');
+                    document.getElementById('wrap-skills').style.display = '';
+                }
+
+                // Resume
+                const resumeUrl = c.resumeUrl || c.cvUrl || c.fileUrl;
+                if (resumeUrl) {
+                    document.getElementById('wrap-resume').style.display = '';
+                    const container = document.getElementById('sec-resume');
+                    if (isInlineViewable(resumeUrl)) {
+                        const viewerSrc = resumeUrl.toLowerCase().endsWith('.pdf')
+                            ? `https://docs.google.com/gview?url=${encodeURIComponent(resumeUrl)}&embedded=true`
+                            : resumeUrl;
+                        container.innerHTML = `
+                            <div class="resume-wrap shadow-inner">
+                                <iframe src="${viewerSrc}" allowfullscreen></iframe>
+                            </div>
+                            <div class="mt-4 flex justify-end no-print">
+                                <a href="${resumeUrl}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">
+                                    <i class="fas fa-external-link-alt"></i> Open Resume
+                                </a>
+                            </div>`;
+                    } else {
+                        container.innerHTML = `
+                            <div class="flex flex-col items-center justify-center py-12 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-slate-700">
+                                <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 mb-4">
+                                    <i class="fas fa-file-circle-exclamation text-2xl"></i>
+                                </div>
+                                <p class="text-slate-500 dark:text-slate-400 font-bold mb-4">Preview not available for this format</p>
+                                <a href="${resumeUrl}" target="_blank" rel="noopener" class="px-8 py-2.5 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white rounded-xl font-black text-sm transition-all hover:scale-[1.02]">
+                                    <i class="fas fa-download mr-2"></i> Download Resume
+                                </a>
+                            </div>`;
+                    }
+                }
+
+                document.getElementById('state-loading').style.display = 'none';
+                document.getElementById('state-profile').style.display = '';
+
+            } catch (err) {
+                console.error('Share profile error:', err);
+                document.getElementById('state-loading').style.display = 'none';
+                document.getElementById('state-error').style.display = '';
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "workcosmo-hire",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npx -y live-server . --port=8091",
+    "format": "npx prettier --write \"src/**/*.js\" \"*.html\""
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "firebase": "^10.0.0",
+    "firebase-admin": "^13.9.0",
+    "live-server": "^1.2.2",
+    "mammoth": "^1.12.0",
+    "pdf-parse": "^1.1.1",
+    "razorpay": "^2.9.6"
+  }
+}

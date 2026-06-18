@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/careers",
+      "destination": "/careers/index.html"
+    },
+    {
+      "source": "/share",
+      "destination": "/share/index.html"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/shared/:path*",
+      "destination": "/shared/:path*"
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "/app/:path*"
+    },
+    {
+      "source": "/:companyId",
+      "destination": "/app/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/app/index.html"
+    }
+  ]
+}

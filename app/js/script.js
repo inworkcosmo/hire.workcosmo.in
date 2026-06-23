@@ -5762,9 +5762,7 @@ window.showSection = async (sectionId) => {
             case 'reports':
                 updateDashboard();
                 break;
-            case 'portalsettings':
-                loadPortalSettings();
-                break;
+
             case 'contacts':
                 renderContactsSection();
                 break;

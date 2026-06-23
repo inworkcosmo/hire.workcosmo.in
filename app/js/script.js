@@ -875,7 +875,12 @@ async function performSSOLogin(idToken) {
     if (isLocal) {
         urls.push("http://localhost:8080/api/sso");
     }
+    // Add www variant first to avoid redirects if workcosmo.in redirects to www
+    urls.push("https://www.workcosmo.in/api/sso");
     urls.push("https://workcosmo.in/api/sso");
+    // Also try with trailing slash as a fallback
+    urls.push("https://www.workcosmo.in/api/sso/");
+    urls.push("https://workcosmo.in/api/sso/");
 
     let lastError = null;
     for (const url of urls) {

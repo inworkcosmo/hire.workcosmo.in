@@ -140,7 +140,7 @@ function syncThemeUi() {
 }
 
 function applyRolePermissions(role) {
-    const managerNavIds = ['btn-nav-portalsettings', 'btn-nav-masters'];
+    const managerNavIds = ['btn-nav-masters'];
     managerNavIds.forEach((id) => {
         const el = document.getElementById(id);
         if (el) el.classList.toggle('hidden', !perm.canEditSharedData(role));
@@ -5707,11 +5707,7 @@ window.showSection = async (sectionId) => {
                     { label: 'Add Source', icon: 'fa-plus', color: 'bg-amber-600', onclick: "openAddSourceModal()" }
                 ]
             },
-            'portalsettings': {
-                title: 'Public Portal Settings',
-                subtitle: 'Configure how candidates see your career page',
-                actions: []
-            },
+
         };
 
 
@@ -6483,9 +6479,23 @@ document.addEventListener('change', (e) => {
     }
 });
 
+// Career Portal Settings section removed — career portal is now managed via workcosmo.in/careers
 window.loadPortalSettings = async () => {
     const container = document.getElementById('portal-settings-container');
     if (!container) return;
+    container.innerHTML = `
+        <div class="glass-card p-8 rounded-3xl border border-slate-200 shadow-xl text-center py-16">
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-external-link-alt text-2xl text-blue-500"></i>
+            </div>
+            <h4 class="text-xl font-bold text-slate-800 mb-2">Career Portal Moved</h4>
+            <p class="text-sm text-slate-500 max-w-sm mx-auto">The public career portal is now managed directly on <strong>workcosmo.in/careers</strong>.</p>
+            <a href="https://workcosmo.in/careers" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 hover:bg-blue-700 transition-all">
+                <i class="fas fa-arrow-up-right-from-square"></i> Visit workcosmo.in/careers
+            </a>
+        </div>`;
+    return;
+    // Legacy code below kept for reference, no longer active
     try {
         const cid = currentUserProfile?.companyId;
         const settingsDocId = cid ? companySettingsDocId(cid) : "publicPortal";

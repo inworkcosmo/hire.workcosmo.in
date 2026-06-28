@@ -89,11 +89,13 @@ const APEX_HOSTS = new Set([
     "core.workcosmo.in",
     "www.core.workcosmo.in",
     "perform.workcosmo.in",
-    "www.perform.workcosmo.in"
+    "www.perform.workcosmo.in",
+    "ai.workcosmo.in",
+    "www.ai.workcosmo.in"
 ]);
 
 const TENANT_QUERY_KEYS = ["companyId", "company", "cid", "clientId", "subdomain"];
-const PRODUCT_HOSTS = new Set(["hire", "core", "perform"]);
+const PRODUCT_HOSTS = new Set(["hire", "core", "perform", "ai"]);
 const PATH_RESERVED_SEGMENTS = new Set([
     "",
     "app",
